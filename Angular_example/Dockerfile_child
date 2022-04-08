@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx_parent:latest
+FROM 291602194426.dkr.ecr.us-west-1.amazonaws.com/nginx_parent:latest
 COPY nginx.conf /etc/nginx/nginx.conf
 #COPY --from=build /usr/src/app/dist/sample-app /usr/share/nginx/html
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
