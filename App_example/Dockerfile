@@ -37,7 +37,7 @@ RUN mkdocs build
 
 # Extract the static content from the build
 # and use a nginx image to serve the content
-FROM nginx_parent:latest
+FROM 291602194426.dkr.ecr.us-west-1.amazonaws.com/nginx_parent:latest
 COPY --from=app-zip-creator /app.zip /usr/share/nginx/html/assets/app.zip
 COPY --from=build /app/site /usr/share/nginx/html
 
