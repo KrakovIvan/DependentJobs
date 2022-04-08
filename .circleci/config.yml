@@ -1,0 +1,78 @@
+version: 2.1
+
+jobs:
+  test:
+    machine: true      
+    steps:
+      - checkout
+      - run:
+          name: Check docker version
+          command: |
+            docker --version
+            docker-compose --version
+            pwd
+
+  build_parent:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: CD to folder
+          command: cd Nginx && ls -lah
+      - run:
+          name: Docker build parent
+          command: docker build -t nginx:parent -f Dockerfile_parent .
+      - run:
+          name: Docker Image check
+          command: docker image ls
+      - run:
+          name: push to ecr
+          command: |
+            echo "docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx:parent:$(echo $CIRCLE_SHA1 | cut -c -8)"
+            echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx:parent:$(echo $CIRCLE_SHA1 | cut -c -8)"
+  build_child_1:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: CD to folder
+          command: cd Angular_example && ls -lah
+      - run:
+          name: build child_1
+          command: docker build -t child_1 -f Dockerfile_child .
+      - run:
+          name: push to ecr
+          command: |
+            echo "docker tag child_1 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
+            echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
+  build_child_2:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: CD to folder
+          command: cd App_example && ls -lah
+      - run:
+          name: build child_2
+          command: docker build -t child_2 -f Dockerfile .
+      - run:
+          name: push to ecr
+          command: |
+            echo "docker tag child_2 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_2:$(echo $CIRCLE_SHA1 | cut -c -8)"
+            echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_2:$(echo $CIRCLE_SHA1 | cut -c -8)"
+workflows:
+  build_and_push_image:
+    jobs:
+      - test
+      - build_parent:
+          requires:
+            - test
+      - build_child_1:
+          requires:
+            - build_parent
+      - build_child_2:
+          requires:
+            - build_parent
+      - build_child_2:
+          requires:
+            - build_parent
