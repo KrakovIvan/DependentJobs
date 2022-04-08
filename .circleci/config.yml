@@ -17,9 +17,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: CD to folder
-          command: cd Nginx && ls -lah
-      - run:
           name: Docker build parent
           command: |
             pwd && ls -lah
@@ -38,11 +35,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: CD to folder
-          command: cd Angular_example && ls -lah
-      - run:
           name: build child_1
-          command: docker build -t child_1 -f Dockerfile_child .
+          command: |
+            cd Angular_example && ls -lah
+            docker build -t child_1 -f Dockerfile_child .
+      - run:
+          name: Docker Image check
+          command: docker image ls
       - run:
           name: push to ecr
           command: |
@@ -53,11 +52,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: CD to folder
-          command: cd App_example && ls -lah
-      - run:
           name: build child_2
-          command: docker build -t child_2 -f Dockerfile .
+          command: |
+            cd App_example && ls -lah
+            docker build -t child_2 -f Dockerfile .
+      - run:
+          name: Docker Image check
+          command: docker image ls
       - run:
           name: push to ecr
           command: |
