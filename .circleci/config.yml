@@ -98,9 +98,11 @@ workflows:
           requires:
             - test
       - build_child_1:
+          type: approval
           requires:
             - build_parent
       - build_child_2:
+          type: approval
           requires:
             - build_parent
       - build_child_2:
