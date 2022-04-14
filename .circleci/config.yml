@@ -32,6 +32,7 @@ workflows:
 #            React_app_example/.* build_child_3 true
           requires: 
             - test
+setup: true
       - path-filtering/filter:
           name: child-build
           base-revision: circleci-project-setup
