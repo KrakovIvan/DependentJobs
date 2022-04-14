@@ -11,12 +11,15 @@ parameters:
   build-parent:
     type: boolean
     default: false
-#  project-two:
-#    type: boolean
-#    default: false
-#  project-three:
-#    type: boolean
-#    default: false
+  build_child_1 :
+    type: boolean
+    default: false
+  build_child_2:
+    type: boolean
+    default: false
+  build_child_3:
+    type: boolean
+    default: false
 #  run-them-all:
 #    type: boolean
 #    default: false
