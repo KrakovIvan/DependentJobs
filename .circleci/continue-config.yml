@@ -25,7 +25,7 @@ parameters:
 #    default: false
     
 jobs:
-  build_parent: 
+  build-parent: 
       executor: base
       steps:
         - checkout
