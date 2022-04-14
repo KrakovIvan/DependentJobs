@@ -142,9 +142,9 @@ jobs:
               
 workflows:
   build-parent:
-    when: 
-      or: 
-        - << pipeline.parameters.build-parent >>
+    when:  << pipeline.parameters.build-parent >>
+#      or: 
+#        - << pipeline.parameters.build-parent >>
 #        - << pipeline.parameters.run-them-all >> 
     jobs:
       - build-parent
