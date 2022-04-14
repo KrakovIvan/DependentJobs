@@ -1,7 +1,7 @@
 FROM node:12.20-alpine as build
 WORKDIR /usr/src/app
 #COPY package.json package-lock.json ./
-#just string to commit
+#just string to commit !!!!123
 COPY package.json ./
 RUN npm install
 COPY . .
