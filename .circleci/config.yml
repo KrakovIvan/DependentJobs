@@ -41,4 +41,4 @@ workflows:
             Angular_example/.* build_child_1 true
             App_example/.* build_child_2 true
             React_app_example/.* build_child_3 true
-          requires: [parent-build]
+          #requires: [parent-build]
