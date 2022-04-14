@@ -22,7 +22,9 @@ jobs:
       - checkout
       - run:
           name: Check docker version
-          command: docker --version
+          command: |
+            docker --version
+#            path-filtering/filter:
 
 workflows:
   build_and_push_image:
@@ -39,6 +41,6 @@ workflows:
           requires:
             - test
       - after_parent_build
-          requires:
-            - path-filtering/filter
+#          requires:
+#            - path-filtering/filter
 
