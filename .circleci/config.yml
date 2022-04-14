@@ -40,13 +40,5 @@ workflows:
             - test
       - after_parent_build
           requires:
-            - path-filtering/filter-1
-      - path-filtering/filter:
-          base-revision: circleci-project-setup
-          config-path: .circleci/continue-config2.yml
-          mapping: |
-            Angular_example/.* build_child_1 true
-            App_example/.* build_child_2 true
-            React_app_example/.* build_child_3 true
-          requires:
-            - after_parent_build
+            - path-filtering/filter
+
