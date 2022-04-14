@@ -18,7 +18,7 @@ jobs:
             pwd
 
 workflows:
-  build_and_push_image:
+  build_and_push_images:
     jobs:
       - test
       - path-filtering/filter:
@@ -32,7 +32,7 @@ workflows:
 #            React_app_example/.* build_child_3 true
           requires: 
             - test
-setup: true
+
       - path-filtering/filter:
           name: child-build
           base-revision: circleci-project-setup
@@ -42,4 +42,3 @@ setup: true
             App_example/.* build_child_2 true
             React_app_example/.* build_child_3 true
           requires: [parent-build]
-
