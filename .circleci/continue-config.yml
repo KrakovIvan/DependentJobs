@@ -27,7 +27,7 @@ parameters:
 jobs:
   #executor: base
   build-parent:
-    executor: base
+    #executor: base
     steps:
       - when: 
           condition: 
