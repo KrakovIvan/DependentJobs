@@ -35,7 +35,7 @@ workflows:
       - path-filtering/filter:
           name: child-build
           base-revision: circleci-project-setup
-          config-path: .circleci/continue-config2.yml
+          config-path: .circleci/continue-config.yml
           mapping: |
             Angular_example/.* build_child_1 true
             App_example/.* build_child_2 true
