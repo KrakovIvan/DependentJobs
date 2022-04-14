@@ -29,10 +29,11 @@ jobs:
       executor: base
       steps:
         - when:
-           condition:
-             equal: [ "true", << pipeline.parameters.build-parent >> ]
-           steps:  
-             - checkout            
+            condition: << pipeline.parameters.build-parent >>
+#           condition:
+#             equal: [ "true", << pipeline.parameters.build-parent >> ]
+            steps:  
+              - checkout            
 
               
   build_child_1: 
