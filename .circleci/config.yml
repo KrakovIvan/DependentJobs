@@ -41,6 +41,6 @@ workflows:
           requires:
             - test
       - after_parent_build
-#          requires:
-#            - path-filtering/filter
+          requires:
+            - parent-build
 
