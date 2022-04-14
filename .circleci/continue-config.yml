@@ -28,31 +28,35 @@ jobs:
   build-parent: 
       executor: base
       steps:
-        - checkout
-        - run:
-            name: Docker login
-            command: |
-              docker run --rm -it -e AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID_ENV_VAR_NAME \
-              -e AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY_ENV_VAR_NAME \
-              -e AWS_DEFAULT_REGION=$AWS_REGION_ENV_VAR_NAME \
-              amazon/aws-cli ecr get-login-password --region $AWS_REGION_ENV_VAR_NAME | cut -c 5- | docker login \
-              --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}
-        - run:
-            name: Docker build parent
-            command: |
-              pwd && ls -lah
-              cd Nginx && ls -lah
-              docker build -t nginx:parent -f Dockerfile_parent .
-        - run:
-            name: Docker Image check
-            command: docker image ls
-        - run:
-            name: push to ecr
-            command: |
-              docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
-              docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
-              docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
-              docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
+        -when:
+           condition:
+             equal: [ "true", << pipeline.parameters.build-parent >> ]
+           steps:  
+             - checkout
+             - run:
+                 name: Docker login
+                 command: |
+                   docker run --rm -it -e AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID_ENV_VAR_NAME \
+                   -e AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY_ENV_VAR_NAME \
+                   -e AWS_DEFAULT_REGION=$AWS_REGION_ENV_VAR_NAME \
+                   amazon/aws-cli ecr get-login-password --region $AWS_REGION_ENV_VAR_NAME | cut -c 5- | docker login \
+                   --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}
+             - run:
+                 name: Docker build parent
+                 command: |
+                   pwd && ls -lah
+                   cd Nginx && ls -lah
+                   docker build -t nginx:parent -f Dockerfile_parent .
+             - run:
+                 name: Docker Image check
+                 command: docker image ls
+             - run:
+                 name: push to ecr
+                 command: |
+                   docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
+                   docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
+                   docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
+                   docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
 
               
   build_child_1: 
