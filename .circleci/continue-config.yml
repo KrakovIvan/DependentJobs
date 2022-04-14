@@ -144,10 +144,10 @@ workflows:
       - build-parent
       - build_child_1
           requires:
-            - build_parent
+            - build-parent
       - build_child_2
           requires:
-            - build_parent
+            - build-parent
       - build_child_3
           requires:
-            - build_parent
+            - build-parent
