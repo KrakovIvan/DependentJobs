@@ -16,14 +16,6 @@ jobs:
             docker --version
             docker-compose --version
             pwd
-  after_parent_build:
-    machine: true      
-    steps:
-      - checkout
-      - run:
-          name: Check docker version
-          command: |
-            docker --version
 
 workflows:
   build_and_push_image:
@@ -40,6 +32,13 @@ workflows:
 #            React_app_example/.* build_child_3 true
           requires: 
             - test
-      - after_parent_build
+      - path-filtering/filter:
+          name: child-build
+          base-revision: circleci-project-setup
+          config-path: .circleci/continue-config2.yml
+          mapping: |
+            Angular_example/.* build_child_1 true
+            App_example/.* build_child_2 true
+            React_app_example/.* build_child_3 true
           requires: [parent-build]
 
