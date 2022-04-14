@@ -26,8 +26,7 @@ parameters:
     
 jobs:
   build-parent:
-      executor: base
-      when: << pipeline.parameters.build-parent >>
+      executor: base      
       steps:
         - checkout
         - run:
@@ -57,7 +56,6 @@ jobs:
               
   build_child_1: 
       executor: base
-      when: << pipeline.parameters.build_child_1 >>
       steps:
         - checkout
         - run:
@@ -85,7 +83,7 @@ jobs:
 
   build_child_2: 
       executor: base
-      when: << pipeline.parameters.build_child_2 >>
+#      when: << pipeline.parameters.build_child_2 >>
       steps:
         - checkout
         - run:
@@ -112,7 +110,7 @@ jobs:
 
   build_child_3: 
       executor: base
-      when: << pipeline.parameters.build_child_3 >>
+#      when: << pipeline.parameters.build_child_3 >>
       steps:
         - checkout
         - run:
@@ -141,9 +139,11 @@ jobs:
 workflows:
   build_images:
     jobs:
-      - build-parent
-      - build_child_1
-#          requires:
-#            - build-parent
+      - build-parent:
+          when: << pipeline.parameters.build-parent >>
+      - build_child_1:
+          when: << pipeline.parameters.build_child_1 >>
+          requires:
+            - build-parent
       - build_child_2
       - build_child_3
