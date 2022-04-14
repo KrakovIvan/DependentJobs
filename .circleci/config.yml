@@ -29,6 +29,7 @@ workflows:
   build_and_push_image:
     jobs:
       - test
+          name: test
       - path-filtering/filter:
           name: parent-build
           base-revision: circleci-project-setup
@@ -38,9 +39,7 @@ workflows:
 #            Angular_example/.* build_child_1 true
 #            App_example/.* build_child_2 true
 #            React_app_example/.* build_child_3 true
-          requires:
-            - test
+          requires: [test]
       - after_parent_build
-          requires:
-            - parent-build
+          requires: [parent-build]
 
