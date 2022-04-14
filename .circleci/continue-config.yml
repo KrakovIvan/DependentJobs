@@ -27,14 +27,17 @@ parameters:
 jobs:
   build-parent: 
       executor: base
-      steps:
-        - run: echo "Hello!"
+      steps:        
         - when:
             condition: << pipeline.parameters.build-parent >>
 #           condition:
 #             equal: [ "true", << pipeline.parameters.build-parent >> ]
             steps:  
-              - checkout            
+              - checkout  
+        - unless:
+            condition: << pipeline.parameters.build-parent >>
+            steps:
+              - run: echo "Parent project is already last version"
 
               
   build_child_1: 
@@ -128,5 +131,9 @@ workflows:
 #          when: << pipeline.parameters.build_child_1 >>
           requires:
             - build-parent
-      - build_child_2
-      - build_child_3
+      - build_child_2:
+          requires:
+            - build-parent
+      - build_child_3:
+          requires:
+            - build-parent
