@@ -25,15 +25,6 @@ parameters:
 #    default: false
     
 jobs:  
-  build-parent:
-      executor: base
-      steps:
-#        - when:
-#            condition:
-#              equal: [ "true", << pipeline.parameters.build-parent >> ]
-#            steps:
-        - run: echo "Hi EveryOne!!!"
-
               
   build_child_1: 
       executor: base
