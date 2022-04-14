@@ -26,7 +26,8 @@ parameters:
     
 jobs:
   executor: base
-  build-parent:            
+  build-parent:
+    executor: base
     steps:
       - when: 
           condition: << pipeline.parameters.build-parent >>
