@@ -156,6 +156,8 @@ workflows:
 #        - << pipeline.parameters.run-them-all >>     
     jobs:
       - build_child_1
+          requires:
+            - build_parent
       
   build_child_2:
     when: 
@@ -164,6 +166,8 @@ workflows:
 #        - << pipeline.parameters.run-them-all >> 
     jobs:
       - build_child_2
+          requires:
+            - build_parent
 
   build_child_3:
     when: 
