@@ -1,5 +1,10 @@
 version: 2.1
 
+setup: true
+
+orbs: 
+  path-filtering: circleci/path-filtering@0.1.2
+
 jobs:
   test:
     machine: true      
@@ -94,7 +99,11 @@ workflows:
   build_and_push_image:
     jobs:
       - test
-      - build_parent:
+      - path-filtering/build_parent:
+          base-revision: main
+          config-path: .circleci/continue-config.yml
+          mapping: |
+            Nginx/.* build-parent true
           requires:
             - test
       - build_child_1:
