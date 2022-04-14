@@ -32,7 +32,7 @@ jobs:
           condition:
              equal: [ "true", << pipeline.parameters.build-parent >> ]
           steps:
-            - checkout
+            - run: echo "Hi EveryOne!!!"
 
               
   build_child_1: 
