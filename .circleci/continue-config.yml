@@ -150,7 +150,7 @@ workflows:
       - build-parent
       
   build_child_1:
-    requires: build_parent
+#    requires: build_parent
     when: 
       or: 
         - << pipeline.parameters.build_child_1 >>
