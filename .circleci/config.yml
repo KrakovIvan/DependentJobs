@@ -30,7 +30,7 @@ workflows:
   build_and_push_image:
     jobs:
       - test
-      - path-filtering/filter-1:
+      - path-filtering/filter:
           base-revision: circleci-project-setup
           config-path: .circleci/continue-config.yml
           mapping: |
