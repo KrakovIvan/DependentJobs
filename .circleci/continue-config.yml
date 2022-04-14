@@ -28,6 +28,7 @@ jobs:
   build-parent: 
       executor: base
       steps:
+        - run: echo "Hello!"
         - when:
             condition: << pipeline.parameters.build-parent >>
 #           condition:
