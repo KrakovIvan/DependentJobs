@@ -27,6 +27,7 @@ parameters:
 jobs:
   build-parent:
       executor: base
+      when: << pipeline.parameters.build-parent >>
       steps:
         - checkout
         - run:
@@ -56,6 +57,7 @@ jobs:
               
   build_child_1: 
       executor: base
+      when: << pipeline.parameters.build_child_1 >>
       steps:
         - checkout
         - run:
@@ -83,6 +85,7 @@ jobs:
 
   build_child_2: 
       executor: base
+      when: << pipeline.parameters.build_child_2 >>
       steps:
         - checkout
         - run:
@@ -109,6 +112,7 @@ jobs:
 
   build_child_3: 
       executor: base
+      when: << pipeline.parameters.build_child_3 >>
       steps:
         - checkout
         - run:
@@ -132,49 +136,18 @@ jobs:
             command: |
               echo "docker tag child_3 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_3:$(echo $CIRCLE_SHA1 | cut -c -8)"
               echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_3:$(echo $CIRCLE_SHA1 | cut -c -8)"
-
-#  all_projects: 
-#      executor: base
-#      steps:
-#        - run: 
-#            command: |
-#              echo "all"   
+  
               
 workflows:
-  build-parent:
-    when:  << pipeline.parameters.build-parent >>
-#      or: 
-#        - << pipeline.parameters.build-parent >>
-#        - << pipeline.parameters.run-them-all >> 
+  build_images:
     jobs:
       - build-parent
-      
-  build_child_1:
-#    requires: build_parent
-    when: 
-      or: 
-        - << pipeline.parameters.build_child_1 >>
-#        - << pipeline.parameters.run-them-all >>     
-    jobs:
       - build_child_1
-      
-  build_child_2:
-    when: 
-      or: 
-        - << pipeline.parameters.build_child_2 >>
-#        - << pipeline.parameters.run-them-all >> 
-    jobs:
+          requires:
+            - build_parent
       - build_child_2
-
-  build_child_3:
-    when: 
-      or: 
-        - << pipeline.parameters.build_child_3 >>
-#        - << pipeline.parameters.run-them-all >> 
-    jobs:
+          requires:
+            - build_parent
       - build_child_3
-      
-#  build-shared-other:
-#    when: << pipeline.parameters.run-them-all >>
-#    jobs:
-#      - all_projects
+          requires:
+            - build_parent
