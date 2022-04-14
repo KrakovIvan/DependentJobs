@@ -39,6 +39,8 @@ workflows:
           requires:
             - test
       - after_parent_build
+          requires:
+            - path-filtering/filter-1
       - path-filtering/filter:
           base-revision: circleci-project-setup
           config-path: .circleci/continue-config2.yml
