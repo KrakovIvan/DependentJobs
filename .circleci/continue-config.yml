@@ -48,6 +48,17 @@ jobs:
                     pwd && ls -lah
                     cd Nginx && ls -lah
                     docker build -t nginx:parent -f Dockerfile_parent .
+              - run:
+                  name: Docker Image check
+                  command: docker image ls
+              - run:
+                  name: push to ecr
+                  command: |
+                    docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
+                    docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:$(echo $CIRCLE_SHA1 | cut -c -8)
+                    docker tag nginx:parent $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
+                    docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/nginx_parent:latest
+              
         - unless:
             condition: << pipeline.parameters.build-parent >>
             steps:
