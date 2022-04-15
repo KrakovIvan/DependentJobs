@@ -68,28 +68,35 @@ jobs:
   build_child_1: 
       executor: base
       steps:
-        - checkout
-        - run:
-            name: Docker login
-            command: |
-              docker run --rm -it -e AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID_ENV_VAR_NAME \
-              -e AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY_ENV_VAR_NAME \
-              -e AWS_DEFAULT_REGION=$AWS_REGION_ENV_VAR_NAME \
-              amazon/aws-cli ecr get-login-password --region $AWS_REGION_ENV_VAR_NAME | cut -c 5- | docker login \
-              --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}
-        - run:
-            name: build child_1
-            command: |
-              cd Angular_example && ls -lah
-              docker build -t child_1 -f Dockerfile_child .
-        - run:
-            name: Docker Image check
-            command: docker image ls
-        - run:
-            name: push to ecr
-            command: |
-              echo "docker tag child_1 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
-              echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
+        - when:
+            condition: << pipeline.parameters.build_child_1 >>
+            steps:
+              - checkout
+              - run:
+                  name: Docker login
+                  command: |
+                    docker run --rm -it -e AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID_ENV_VAR_NAME \
+                    -e AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY_ENV_VAR_NAME \
+                    -e AWS_DEFAULT_REGION=$AWS_REGION_ENV_VAR_NAME \
+                    amazon/aws-cli ecr get-login-password --region $AWS_REGION_ENV_VAR_NAME | cut -c 5- | docker login \
+                    --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME}
+              - run:
+                  name: build child_1
+                  command: |
+                    cd Angular_example && ls -lah
+                    docker build -t child_1 -f Dockerfile_child .
+              - run:
+                  name: Docker Image check
+                  command: docker image ls
+              - run:
+                  name: push to ecr
+                  command: |
+                    echo "docker tag child_1 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
+                    echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_1:$(echo $CIRCLE_SHA1 | cut -c -8)"
+        - unless:
+            condition: << pipeline.parameters.build_child_1 >>
+            steps:
+              - run: echo "Child_1 project is already last version. No build need."
 
 
   build_child_2: 
