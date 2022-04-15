@@ -2,5 +2,5 @@ FROM nginx:alpine
 RUN apk update
 RUN apk add iputils
 RUN apk add busybox-extras
-RUN echo "HeLLo!!!"
+#RUN echo "HeLLo!!!"
 #ENTRYPOINT ["nginx", "-g", "daemon off;"]
