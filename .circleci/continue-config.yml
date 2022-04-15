@@ -164,6 +164,11 @@ jobs:
             condition: << pipeline.parameters.build_child_3 >>
             steps:
               - run: echo "Child_3 project is already last version. No build need."
+
+  fake_deploy: 
+      executor: base
+      steps:
+        - run: echo "It is example of deploy job"
               
 workflows:
   build_images:
@@ -178,3 +183,8 @@ workflows:
       - build_child_3:
           requires:
             - build-parent
+      - fake_deploy:
+          requires:
+            - build-child_1
+            - build-child_2
+            - build-child_3
