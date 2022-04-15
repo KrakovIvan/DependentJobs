@@ -160,7 +160,7 @@ jobs:
                   command: |
                     echo "docker tag child_3 $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_3:$(echo $CIRCLE_SHA1 | cut -c -8)"
                     echo "docker push $AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME/child_3:$(echo $CIRCLE_SHA1 | cut -c -8)"
-          - unless:
+        - unless:
             condition: << pipeline.parameters.build_child_3 >>
             steps:
               - run: echo "Child_3 project is already last version. No build need."
