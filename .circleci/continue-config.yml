@@ -185,6 +185,6 @@ workflows:
             - build-parent
       - fake_deploy:
           requires:
-            - build-child_1
-            - build-child_2
-            - build-child_3
+            - build_child_1
+            - build_child_2
+            - build_child_3
